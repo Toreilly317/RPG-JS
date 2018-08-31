@@ -3,25 +3,14 @@ import Go from "./lib/abilities/Go";
 import BounceOffBounds from "./lib/abilities/BounceOffBounds";
 
 import Rectangle from "./lib/shapes/Rectangle";
-import Circle from "./lib/shapes/Circle";
 
-const game = new Game("canvas");
+const game = new Game();
+const worldOne = game.addWorld("1");
+const level1 = worldOne.addLevel("1");
 
-const brick = new Rectangle(16, 16);
-brick.vel.set(0, 1);
-brick.pos.set(20, 20);
-brick.addAbility(new Go());
-brick.addAbility(new BounceOffBounds());
+const brick = new Rectangle(1, 1);
+brick.physics.vel.set(2, 2);
 
-const circle = new Circle(16);
-circle.vel.set(0, 1);
-circle.pos.set(100, 20);
-circle.addAbility(new Go());
-circle.addAbility(new BounceOffBounds());
+level1.addEntity(brick);
 
-game.addEntity(brick);
-game.addEntity(circle);
-
-game.start();
-
-window.game = game;
+game.start("1", "1");

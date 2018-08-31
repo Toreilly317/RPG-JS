@@ -1,38 +1,35 @@
-import Vec2 from "./Vec2";
+import Physics from "./Physics";
 
 class Entity {
-  constructor() {
-    //physicis
-    this.pos = new Vec2(0, 0);
-    this.vel = new Vec2(0, 0);
-    this.size = new Vec2(0, 0);
-    this.mass = 1;
-    this.acceleration = 0;
-    this.distance = 0;
-
-    //other
+  constructor(w = 16, h = 16) {
+    this.physics = new Physics();
+    this.physics.size.set(w, h);
     this.abilities = [];
   }
 
-  addAbility(ability) {
+  addAbility = ability => {
     this.abilities.push(ability);
     this[ability.NAME] = ability;
-  }
+  };
 
-  obstruct(side) {
+  obstruct = side => {
     this.traits.forEach(trait => {
       trait.obstruct(this, side);
     });
-  }
-
-  draw = () => {
-    console.log("draw");
   };
 
-  update = deltaTime => {
+  updateAbilities = () => {
     this.abilities.forEach(ability => {
-      ability.update(this, deltaTime);
+      ability.update(this.deltaTime);
     });
+  };
+
+  draw = ctx => {};
+
+  update = (level, ctx, deltaTime) => {
+    this.physics.update(deltaTime, level);
+    this.updateAbilities(deltaTime, level);
+    this.draw(ctx);
   };
 }
 

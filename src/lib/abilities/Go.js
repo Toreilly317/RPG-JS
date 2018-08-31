@@ -6,8 +6,8 @@ class Go extends Ability {
   }
 
   update = (entity, deltaTime) => {
-    entity.pos.x += entity.vel.x;
-    entity.pos.y += entity.vel.y;
+    entity.pos.x += entity.vel.x * deltaTime;
+    entity.pos.y += entity.vel.y * deltaTime;
   };
 }
 

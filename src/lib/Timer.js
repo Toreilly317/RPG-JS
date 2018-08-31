@@ -1,29 +1,38 @@
-class Timer {
-  constructor(deltaTime = 1 / 60, time = window.time) {
-    this.accumulatedTime = 0;
+export default class Timer {
+  constructor(deltaTime = 1 / 60) {
+    this.now = new Date().getSeconds();
+
     this.lastTime = 0;
+    this.accumulatedTime = 0;
     this.deltaTime = deltaTime;
-    this.update();
+    this.onFullCycle = () => true;
+    this.update = this.update.bind(this);
   }
 
-  update = time => {
+  update = function*(onChange) {
+    this.accumulatedTime += (this.now - this.lastTime) / 1000;
     if (this.accumulatedTime > 1) {
       this.accumulatedTime = 1;
     }
 
     while (this.accumulatedTime > this.deltaTime) {
-      this.update(this.deltaTime);
       this.accumulatedTime -= this.deltaTime;
+      yield onChange.next(deltaTime, level, ctx);
     }
 
-    this.lastTime = time;
+    yield onchange.next().fullCycle;
 
-    requestAnimationFrame(this.update);
+    this.lastTime = this.now;
   };
 
-  start(time) {
-    this.update(time);
-  }
-}
+  update = (level, ctx, onTick) => {
+    //prevent dead frame
 
-export default Timer;
+    onTick = () => {};
+
+    level.entities.forEach(entity => {
+      entity.update(level, this.deltaTime);
+      entity.draw(ctx);
+    });
+  };
+}

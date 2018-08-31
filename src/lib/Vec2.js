@@ -8,4 +8,6 @@ export default class Vec2 {
     this.x = x;
     this.y = y;
   };
+
+  oscillate = () => {};
 }
